@@ -56,10 +56,10 @@ sun.sun_times(55.9533, -3.1883, "2026-11-08", "Europe/London").sunset           
 ```bash
 python3 -I scripts/cli.py free-trip 2026-11-07 2026-11-10 --remote 1,4 --region ES-MD-2026 --back-home-to-work
 python3 -I scripts/cli.py sun 55.9533 -3.1883 2026-11-08 --tz Europe/London
-python3 -I -m unittest discover -s tests -v     # 58 tests: scripts, holidays, privacy, links, installer
+python3 -I -m unittest discover -s tests -v     # 66 tests: scripts, holidays, price log, ics, privacy, links, installer
 ```
 
-`scripts/compare.py` ranks options by effective cost per day; `evals/scenarios.md` lists ten scenarios to check that an agent follows the skill.
+`scripts/compare.py` ranks options by effective cost per day; `scripts/price_log.py` logs prices and flags stale ones; `cli.py ics` writes an `.ics` file from JSON events; `evals/scenarios.md` lists ten scenarios to check that an agent follows the skill.
 
 ## Structure
 
@@ -72,7 +72,7 @@ references/                      workflow, search efficiency, tools and MCPs, pr
                                  setup and MCPs, destination research, post-trip, lessons learned
 templates/                       trip note, purchase checklist, pre-pay review, calendar event,
                                  itinerary prompt, traveler profile
-scripts/                         cli, links, free_trip, holidays, sun, ics, compare
+scripts/                         cli, links, free_trip, holidays, sun, ics, compare, price_log
 data/holidays/                   public-holiday files per region and year
 tests/                           unit tests, privacy and link checks
 evals/                           scenarios to evaluate agent behavior

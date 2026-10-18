@@ -13,6 +13,18 @@ A price is only useful with a date, a source and a condition. Always write: `pri
 | `estimate` | Your own estimate, with the basis | "Food about 20 EUR a day" |
 | `stale` | Older than a few days | A note from three weeks ago |
 
+## Keep a price log
+
+Record every price you rely on so staleness and drift are visible instead of remembered:
+
+```bash
+python3 -I scripts/cli.py price add "MAD-EDI 7-10 Nov" 93 --source "google flights" --file prices.jsonl
+python3 -I scripts/cli.py price show --file prices.jsonl      # latest per item, age and drift
+python3 -I scripts/cli.py price stale --max-age-days 3 --file prices.jsonl
+```
+
+Before recommending a purchase, run `stale`: anything listed must be re-checked. Keep the log in the traveler's own notes (it is git-ignored in this repository).
+
 ## Why stale prices bite
 
 Real examples from planning sessions:

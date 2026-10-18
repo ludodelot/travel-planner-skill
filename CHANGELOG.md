@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.0
+- `scripts/price_log.py` and `cli.py price add/show/stale`: log prices with label, source and time; list stale prices; show drift since first seen.
+- `cli.py ics`: write an `.ics` file from a JSON list of events (the fallback when no calendar connection exists).
+- 66 tests.
+
 ## 0.4.0
 - Holiday data: `data/holidays/ES-MD-2026.json` with sources, checked date and levels; `scripts/holidays.py` loader; `cli.py free-trip --region/--levels/--holidays-file`.
 - `templates/pre-pay-review.md`: one-screen review after the purchase tabs are open.

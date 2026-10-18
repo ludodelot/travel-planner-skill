@@ -44,7 +44,8 @@ A Claude Code skill for planning trips with an AI agent. It is built from real p
 | `scripts/links.py` | Build Google Flights, Booking, Hostelworld and Maps links; a "go now" directions link needs no origin |
 | `scripts/free_trip.py` | Count how many vacation days a trip costs given weekends, holidays and remote days |
 | `scripts/sun.py` | Sunrise, sunset and civil twilight for any place and date, with no network |
-| `scripts/ics.py` | Write an `.ics` file from itinerary events when no calendar connection exists |
+| `scripts/ics.py` | Write an `.ics` file from itinerary events when no calendar connection exists (`cli.py ics events.json --out trip.ics`) |
+| `scripts/price_log.py` | Log every price with its label, source and time; list stale prices and how much a price moved (`cli.py price add/show/stale`) |
 | `scripts/compare.py` | Rank options by effective cost per day (vacation days, transit hours, new country, refundability), with raw numbers in the table |
 | `scripts/holidays.py` + `data/holidays/` | Public-holiday data per region and year, with sources, a checked date, a confidence note and levels (national, region, city) |
 | `scripts/cli.py` | One command for all of the above, so you can run it without writing code |
@@ -95,7 +96,7 @@ references/              one topic per file (workflow, search, tools, price, con
                          safety, events, budget, browser tabs, setup, destination research,
                          post-trip, lessons)
 templates/               trip note, purchase checklist, pre-pay review, calendar event, itinerary prompt, traveler profile
-scripts/                 cli, links, free_trip, holidays, sun, ics, compare (standard library only)
+scripts/                 cli, links, free_trip, holidays, sun, ics, compare, price_log (standard library only)
 data/holidays/           public-holiday files per region and year
 tests/                   unit tests for the scripts
 examples/                anonymized case studies
