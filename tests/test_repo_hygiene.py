@@ -54,7 +54,7 @@ class LinkTest(unittest.TestCase):
                 self.assertTrue(resolved.exists(), f"{path.relative_to(ROOT)} links to missing {target}")
 
     def test_backticked_repo_paths_exist(self):
-        pattern = re.compile(r"`((?:references|templates|scripts|examples|tests)/[A-Za-z0-9_\-./]+\.(?:md|py|sh))`")
+        pattern = re.compile(r"`((?:references|templates|scripts|examples|tests|evals|data)/[A-Za-z0-9_\-./]+\.(?:md|py|sh|json))`")
         for path in text_files():
             if path.suffix != ".md":
                 continue
@@ -89,6 +89,7 @@ class InstallTest(unittest.TestCase):
             subprocess.run([str(ROOT / "install.sh"), str(dest)], check=True, capture_output=True)
             self.assertTrue((dest / "SKILL.md").is_file())
             self.assertTrue((dest / "scripts" / "cli.py").is_file())
+            self.assertTrue((dest / "data" / "holidays" / "ES-MD-2026.json").is_file())
             self.assertFalse((dest / ".git").exists())
             self.assertFalse((dest / "tests").exists())
 

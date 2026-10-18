@@ -21,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import compare  # noqa: E402
 import free_trip  # noqa: E402
+import holidays  # noqa: E402
 import links  # noqa: E402
 import sun  # noqa: E402
 
@@ -55,6 +56,9 @@ def _build_parser() -> argparse.ArgumentParser:
     p.add_argument("end")
     p.add_argument("--remote", default="", help="comma-separated weekday numbers, Monday=0 (for example 1,4)")
     p.add_argument("--holiday", action="append", default=[], help="ISO date, repeatable")
+    p.add_argument("--region", help="holiday data file code, for example ES-MD-2026 (see data/holidays)")
+    p.add_argument("--holidays-file", help="path to a holiday JSON file")
+    p.add_argument("--levels", help="holiday levels to include: national,region,city (default all)")
     p.add_argument("--remote-abroad", action="store_true")
     p.add_argument("--leave-after-work", action="store_true")
     p.add_argument("--back-home-to-work", action="store_true")
@@ -87,13 +91,26 @@ def run(argv: list[str] | None = None) -> str:
         return links.maps_directions(args.destination, origin=args.origin, mode=args.mode)
     if args.command == "free-trip":
         remote = [int(x) for x in args.remote.split(",") if x.strip() != ""]
+        holiday_dates = list(args.holiday)
+        notes: list[str] = []
+        calendar = None
+        if args.region:
+            calendar = holidays.load_region(args.region)
+        elif args.holidays_file:
+            calendar = holidays.load_file(args.holidays_file)
+        if calendar:
+            levels = holidays.parse_levels(args.levels)
+            holiday_dates += [d.isoformat() for d in calendar.dates(levels)]
+            notes.append(f"holidays: {calendar.region} {calendar.year}, levels {','.join(levels)}, checked {calendar.checked or 'unknown'}")
+            if calendar.confidence:
+                notes.append(f"confidence: {calendar.confidence}")
         cost = free_trip.trip_cost(
-            args.start, args.end, remote, args.holiday, args.remote_abroad,
+            args.start, args.end, remote, holiday_dates, args.remote_abroad,
             args.leave_after_work, args.back_home_to_work,
         )
         rows = [f"{d.day.isoformat()} {d.day.strftime('%a')}: {d.kind:<7} {'free' if d.free else 'COST'}  ({d.reason})" for d in cost.days]
         rows.append(f"vacation days needed: {cost.vacation_days}")
-        return "\n".join(rows)
+        return "\n".join(rows + notes)
     if args.command == "sun":
         t = sun.sun_times(args.lat, args.lon, args.date, args.tz)
         return (

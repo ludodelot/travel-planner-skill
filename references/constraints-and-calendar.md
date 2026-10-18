@@ -15,6 +15,16 @@
 
 Typical rule: when a holiday falls on a Sunday, the region may move it to Monday. Check the decree; do not assume.
 
+## Bundled holiday data and the calculator
+
+`data/holidays/` holds observed dates per region and year, each with sources, a checked date and a confidence note (see `data/holidays/README.md`). The calculator uses them:
+
+```bash
+python3 -I scripts/cli.py free-trip 2026-11-07 2026-11-10 --remote 1,4 --region ES-MD-2026 --back-home-to-work
+```
+
+If the region or year is missing, do not guess: search the official source, tell the traveler the confidence level, and offer to add a data file with sources and the checked date. Use `--levels national,region` when the workplace is outside a city whose local holidays are in the file.
+
 ## The "free trip" rule
 
 A trip is free when every working day it touches is covered by a weekend, a holiday or a remote day. Coming back on a working Monday costs a day.

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.0
+- Holiday data: `data/holidays/ES-MD-2026.json` with sources, checked date and levels; `scripts/holidays.py` loader; `cli.py free-trip --region/--levels/--holidays-file`.
+- `templates/pre-pay-review.md`: one-screen review after the purchase tabs are open.
+- Installer now ships the `data` folder. 58 tests.
+
 ## 0.3.0
 - `scripts/cli.py`: one command for links, free-trip cost, sun times and option comparison.
 - `scripts/compare.py`: rank options by effective cost per day with editable weights and a raw-numbers table.

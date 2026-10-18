@@ -13,7 +13,7 @@ fi
 
 mkdir -p "$DEST"
 # Copy only what the skill needs (no git history, tests cache or local files).
-for item in SKILL.md README.md README.es.md LICENSE references templates scripts examples evals assets; do
+for item in SKILL.md README.md README.es.md LICENSE references templates scripts examples evals data assets; do
   if [ -e "$SRC/$item" ]; then
     rm -rf "${DEST:?}/$item"
     cp -R "$SRC/$item" "$DEST/$item"

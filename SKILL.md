@@ -31,7 +31,7 @@ A Claude Code skill for planning trips with an AI agent. It is built from real p
 | 3. Search | Parallel, deterministic, cheap searches first; deep research only for the shortlist | `references/search-efficiency.md`, `references/tools-and-mcps.md`, `references/destination-research.md` |
 | 4. Verify | Live prices, date variants, baggage, cancellation, notices, entry rules | `references/price-verification.md`, `references/entry-requirements.md` |
 | 5. Decide | Two or three options with trade-offs and a clear pick | `references/results-format.md`, `references/budget.md` |
-| 6. Prepare purchase | Ordered checklist with direct links; open ready-to-buy tabs | `references/browser-purchase-tabs.md`, `references/transport.md`, `references/accommodation.md`, `templates/purchase-checklist.md` |
+| 6. Prepare purchase | Ordered checklist with direct links; open ready-to-buy tabs; one-screen pre-pay review | `templates/pre-pay-review.md`, `references/browser-purchase-tabs.md`, `references/transport.md`, `references/accommodation.md`, `templates/purchase-checklist.md` |
 | 7. Itinerary | Walking-friendly, light-aware, with rain plan and verified hours | `references/itinerary-design.md`, `scripts/sun.py` |
 | 8. Export | Calendar events with local times and map links, or an `.ics` file | `references/calendar-export.md`, `scripts/ics.py` |
 | 9. Record | Update the trip note, lessons and pending items | `templates/trip-note.md` |
@@ -46,12 +46,13 @@ A Claude Code skill for planning trips with an AI agent. It is built from real p
 | `scripts/sun.py` | Sunrise, sunset and civil twilight for any place and date, with no network |
 | `scripts/ics.py` | Write an `.ics` file from itinerary events when no calendar connection exists |
 | `scripts/compare.py` | Rank options by effective cost per day (vacation days, transit hours, new country, refundability), with raw numbers in the table |
+| `scripts/holidays.py` + `data/holidays/` | Public-holiday data per region and year, with sources, a checked date, a confidence note and levels (national, region, city) |
 | `scripts/cli.py` | One command for all of the above, so you can run it without writing code |
 
 Examples:
 
 ```bash
-python3 -I scripts/cli.py free-trip 2026-11-07 2026-11-10 --remote 1,4 --holiday 2026-11-09 --back-home-to-work
+python3 -I scripts/cli.py free-trip 2026-11-07 2026-11-10 --remote 1,4 --region ES-MD-2026 --back-home-to-work
 python3 -I scripts/cli.py sun 55.9533 -3.1883 2026-11-08 --tz Europe/London
 python3 -I scripts/cli.py booking "San Sebastián" 2026-10-31 2026-11-02 --hostels --sort-price
 python3 -I scripts/cli.py maps "Edinburgh Airport" --mode transit
@@ -93,8 +94,9 @@ references/              one topic per file (workflow, search, tools, price, con
                          entry, accommodation, transport, itinerary, calendar, results,
                          safety, events, budget, browser tabs, setup, destination research,
                          post-trip, lessons)
-templates/               trip note, purchase checklist, calendar event, itinerary prompt, traveler profile
-scripts/                 cli, links, free_trip, sun, ics, compare (standard library only)
+templates/               trip note, purchase checklist, pre-pay review, calendar event, itinerary prompt, traveler profile
+scripts/                 cli, links, free_trip, holidays, sun, ics, compare (standard library only)
+data/holidays/           public-holiday files per region and year
 tests/                   unit tests for the scripts
 examples/                anonymized case studies
 evals/                   scenarios to check an agent follows the skill

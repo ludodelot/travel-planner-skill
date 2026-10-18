@@ -56,4 +56,6 @@ Report instead of looping when a page fails three times, the extension does not 
 | 2 | Hostel A (dates set) | Book with free cancellation | 2 nights |
 | 3 | Entry authorization (official) | Apply; check nationality exemption first | urgent |
 
+Use `templates/pre-pay-review.md` for a one-screen review before the traveler pays.
+
 Never claim a purchase is done. The traveler pays.
