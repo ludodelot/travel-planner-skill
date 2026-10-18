@@ -2,75 +2,76 @@
   <img src="assets/banner.png" alt="Voxel airport at night with luggage, a laptop and a small orange voxel mascot" width="100%">
 </p>
 
-# Travel Planner Skill
+# Travel Planner Skill for Claude Code
 
-A skill for AI agents that plans trips end to end: where to go, what it really costs today, how it fits the traveler's work and holiday calendar, where to sleep, how to get there, a walking itinerary, and a calendar full of map links.
+A Claude Code skill that plans trips end to end: where to go, what it really costs today, how it fits your work and holiday calendar, where to sleep, how to get there, a walking itinerary, ready-to-buy browser tabs and a calendar full of map links.
 
-It was built from real planning sessions, so it encodes what actually goes wrong: stale prices, hostels with the wrong dorm, trips that cost a vacation day, entry rules found too late, and tools that fail.
+Built from real planning sessions, so it encodes what actually goes wrong: stale prices, hostels with the wrong dorm, trips that cost a vacation day, entry rules found too late, and tools that fail.
 
 > Idioma: [Español](README.es.md)
 
-## What you get
+## What it does
 
-- **A workflow** from clarifying questions to a ready-to-buy checklist and calendar export.
-- **Verification rules**: label every number `verified`, `from-price` or `estimate`; check live; try date variants.
-- **Calendar logic**: public holidays (national, regional, municipal), remote days, bridges and the "free trip" rule.
-- **Search efficiency**: deterministic URLs, parallel searches, cheap-first, compact extraction.
-- **Tools and MCP guidance**: what to use for rules, prices, calendar and drafts, and how to handle failures.
-- **Itinerary design** for photographers and videographers, with a prompt for other assistants.
-- **Safe-by-default behavior**: prepare and open pages, never pay, send or submit for the traveler.
-- **A tested URL builder**: Google Flights, Booking, Hostelworld, Google Maps directions (with a "go now" link that needs no origin).
+- **Workflow** from clarifying questions to a purchase checklist and calendar export.
+- **Verification rules**: every number is `verified`, `from-price` or `estimate`; live checks; date variants.
+- **Calendar logic**: public holidays (national, regional, municipal), remote days, bridges and the "free trip" rule, with a calculator.
+- **Browser mode**: opens new Chrome tabs ready to buy (rail, hostels, entry authorizations), fills forms only with your confirmation and stops before consent and submit.
+- **MCP-aware**: uses Google Calendar, Gmail drafts, Drive and notes when connected, with fallbacks when not.
+- **Search efficiency**: deterministic URLs, parallel searches, cheap first, compact extraction.
+- **Itineraries** for photographers and videographers: light-aware, walking-friendly, with rain plans.
+- **Safe by default**: the agent prepares; you pay, send and submit.
 
 ## Install
 
-Copy the folder into your agent's skills directory, for example:
-
 ```bash
-git clone https://github.com/ludodelot/travel-planner-skill ~/.claude/skills/travel-planner
+git clone https://github.com/ludodelot/travel-planner-skill
+cd travel-planner-skill
+./install.sh        # copies the skill to ~/.claude/skills/travel-planner
 ```
 
-Then ask your agent to plan a trip, for example: "I have a long weekend in November, budget 300, I like photography and walking, help me choose and prepare the purchases".
+Start a new Claude Code session and ask, for example: "I have a long weekend in November, budget 300, I like photography and walking. Help me choose and prepare the purchases."
+
+For browser mode and calendar export, connect the tools described in [references/setup-and-mcps.md](references/setup-and-mcps.md).
+
+## Sharing with friends
+
+The repository can stay private: add friends as collaborators on GitHub, they run `gh auth login`, clone and run `./install.sh`. The repository contains no personal data, so it can become public later without cleaning. Each person keeps their own traveler profile ([template](templates/traveler-profile.md)) in their own notes.
+
+## Scripts (standard library only)
+
+```python
+import sys; sys.path.insert(0, "scripts")
+import links, free_trip, sun, ics
+
+links.google_flights("MAD", "EDI", "2026-11-07", "2026-11-10")
+links.booking_search("San Sebastián", "2026-10-31", "2026-11-02", hostels_only=True, order_by_price=True)
+links.maps_directions("Edinburgh Airport", mode="transit")       # starts from the user's location
+
+free_trip.trip_cost("2026-11-07", "2026-11-10", remote_weekdays=(1, 4),
+                    holidays=["2026-11-09"], back_home_to_work_last_day=True).vacation_days   # 0
+
+sun.sun_times(55.9533, -3.1883, "2026-11-08", "Europe/London").sunset                          # about 16:18
+```
+
+```bash
+python3 -I -m unittest discover -s tests -v     # 30 tests
+```
 
 ## Structure
 
 ```
-SKILL.md                         entry point: core rules and workflow table
-references/
-  workflow.md                    clarify, constrain, search, verify, decide, prepare
-  search-efficiency.md           how to search with fewer calls and less context
-  tools-and-mcps.md              tools, MCP servers, failure modes
-  price-verification.md          labels, checklist, booking order
-  constraints-and-calendar.md    work calendar, holidays, bridges, free-trip rule
-  entry-requirements.md          visas, electronic authorizations, documents
-  accommodation.md               hostel criteria, traps, message templates
-  transport.md                   train vs. flight, low-cost, night transfers
-  itinerary-design.md            light-aware walking itineraries
-  calendar-export.md             event format, links, time zones, series
-  results-format.md              how to present answers
-  safety-and-consent.md          what the agent never does alone
-  events-and-networking.md       triage of local events
-  lessons-learned.md             twenty concrete lessons
-templates/                       trip note, purchase checklist, calendar event, itinerary prompt
-scripts/links.py                 URL builders (stdlib only)
-tests/test_links.py              unit tests
+SKILL.md                         entry point: first run, core rules, workflow, scripts
+references/                      workflow, search efficiency, tools and MCPs, price verification,
+                                 constraints and calendar, entry requirements, accommodation,
+                                 transport, itinerary design, calendar export, results format,
+                                 safety and consent, events, budget, browser purchase tabs,
+                                 setup and MCPs, lessons learned
+templates/                       trip note, purchase checklist, calendar event, itinerary prompt,
+                                 traveler profile
+scripts/                         links, free_trip, sun, ics
+tests/                           unit tests
 examples/                        anonymized case studies
-```
-
-## URL builder
-
-```python
-from scripts import links  # or: sys.path.insert(0, "scripts"); import links
-
-links.google_flights("MAD", "EDI", "2026-11-07", "2026-11-10")
-links.booking_search("San Sebastián", "2026-10-31", "2026-11-02", hostels_only=True, order_by_price=True)
-links.maps_directions("Edinburgh Airport", mode="transit")      # starts from the user's location
-links.maps_directions("Grassmarket", origin="The Vennel Steps") # starts from a given stop
-```
-
-Run the tests:
-
-```bash
-python3 -I -m unittest discover -s tests -v
+install.sh                       installer
 ```
 
 ## Principles
@@ -83,7 +84,7 @@ python3 -I -m unittest discover -s tests -v
 
 ## Notes on data
 
-Examples use real-world patterns from planning sessions, anonymized. Prices and rules change: always verify against the operator or the official source on the day.
+Examples use real-world patterns from planning sessions, anonymized. Prices and rules change: verify against the operator or the official source on the day.
 
 ## License
 

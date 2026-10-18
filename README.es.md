@@ -24,10 +24,22 @@ Nació de sesiones reales de planificación, así que recoge lo que de verdad fa
 ## Instalación
 
 ```bash
-git clone https://github.com/ludodelot/travel-planner-skill ~/.claude/skills/travel-planner
+git clone https://github.com/ludodelot/travel-planner-skill
+cd travel-planner-skill
+./install.sh        # copia la skill a ~/.claude/skills/travel-planner
 ```
 
-Después pídele a tu agente: "Tengo un finde largo en noviembre, presupuesto 300, me gusta la fotografía y caminar, ayúdame a elegir y preparar las compras".
+Inicia una sesión nueva de Claude Code y pide, por ejemplo: "Tengo un finde largo en noviembre, presupuesto 300, me gusta la fotografía y caminar. Ayúdame a elegir y preparar las compras".
+
+Para el modo navegador y la exportación al calendario, conecta las herramientas descritas en [references/setup-and-mcps.md](references/setup-and-mcps.md).
+
+## Compartir con amigos
+
+El repositorio puede seguir privado: añade a tus amigos como colaboradores en GitHub, ellos hacen `gh auth login`, clonan y ejecutan `./install.sh`. No contiene datos personales, así que podría hacerse público más adelante sin limpiar nada. Cada persona guarda su propio perfil de viajero ([plantilla](templates/traveler-profile.md)) en sus notas.
+
+## Modo navegador
+
+La skill abre pestañas **nuevas** de Chrome, listas para comprar (tren, hostales, autorizaciones de entrada), rellena formularios solo con tu confirmación y se detiene antes de aceptar y enviar. Tú pagas, envías y aceptas.
 
 ## Estructura
 
