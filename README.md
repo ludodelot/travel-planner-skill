@@ -54,8 +54,12 @@ sun.sun_times(55.9533, -3.1883, "2026-11-08", "Europe/London").sunset           
 ```
 
 ```bash
-python3 -I -m unittest discover -s tests -v     # 30 tests
+python3 -I scripts/cli.py free-trip 2026-11-07 2026-11-10 --remote 1,4 --holiday 2026-11-09 --back-home-to-work
+python3 -I scripts/cli.py sun 55.9533 -3.1883 2026-11-08 --tz Europe/London
+python3 -I -m unittest discover -s tests -v     # 48 tests: scripts, privacy, links, installer
 ```
+
+`scripts/compare.py` ranks options by effective cost per day; `evals/scenarios.md` lists ten scenarios to check that an agent follows the skill.
 
 ## Structure
 
@@ -65,11 +69,12 @@ references/                      workflow, search efficiency, tools and MCPs, pr
                                  constraints and calendar, entry requirements, accommodation,
                                  transport, itinerary design, calendar export, results format,
                                  safety and consent, events, budget, browser purchase tabs,
-                                 setup and MCPs, lessons learned
+                                 setup and MCPs, destination research, post-trip, lessons learned
 templates/                       trip note, purchase checklist, calendar event, itinerary prompt,
                                  traveler profile
-scripts/                         links, free_trip, sun, ics
-tests/                           unit tests
+scripts/                         cli, links, free_trip, sun, ics, compare
+tests/                           unit tests, privacy and link checks
+evals/                           scenarios to evaluate agent behavior
 examples/                        anonymized case studies
 install.sh                       installer
 ```
